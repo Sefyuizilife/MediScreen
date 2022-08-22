@@ -1,0 +1,23 @@
+* {
+    margin:  0;
+    padding: 0;
+}
+
+.logo {
+    max-height: 75px !important;
+    max-width:  75px !important;
+    min-height: 75px !important;
+    min-width:  75px !important;
+}
+
+.primary-color {
+    color: #00849A;
+}
+
+.primary-bg-color {
+    background-color: #00849A;
+}
+
+.card.border-dark.mb-3.mx-1.col-5 {
+    padding: 0;
+}
