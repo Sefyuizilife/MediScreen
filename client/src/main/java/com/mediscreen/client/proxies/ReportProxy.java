@@ -8,14 +8,14 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "report", url = "localhost:8083/reports/assess")
+@FeignClient(name = "report", url = "localhost:8083/reports")
 public interface ReportProxy {
 
-    @PostMapping(value = "/id")
-    ResponseEntity<String> getDiabetesReport(@RequestBody Long patId);
+    @GetMapping(value = "/{patId}")
+    ResponseEntity<String> getDiabetesReport(@PathVariable Long patId);
 
     class Configuration {
 

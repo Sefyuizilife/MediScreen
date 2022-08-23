@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,13 +49,13 @@ public class ReportController {
                         report.getDiabeticRisk()
                 ), HttpStatus.OK);
     }
+    //
+    //    @GetMapping("familyName/{familyName}")
+    //    public ResponseEntity<String> getDiabeticReportByPatientName(@PathVariable String familyName) {
+    //
+    //        List<String> reports = new ArrayList<>();
 
-    @GetMapping("familyName/{familyName}")
-    public ResponseEntity<String> getDiabeticReportByPatientName(@PathVariable String familyName) {
-
-        List<String> reports = new ArrayList<>();
-
-        List<Patient> patiens = this.patientProxy.search()
-    }
+    //        List<Patient> patiens = this.patientProxy.search()
+    //    }
 
 }
