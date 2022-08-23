@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<div th:replace="fragments/head.html :: head"></div>
+<body>
+<main>
+    <div th:replace="fragments/header.html :: header"></div>
+    <div th:replace="fragments/nav.html :: html"></div>
+    <div class="container my-5">
+        <div class="d-flex border-bottom border-dark justify-content-end my-3">
+            <div class="col-2"></div>
+            <h2 class="col-8 text-center">Patient</h2>
+            <div class="d-flex justify-content-end align-self-center col-2">
+                <a
+                        class="edit mx-1 link-warning"
+                        data-bs-toggle="modal" href="#"
+                        th:data-bs-target="'#'+ ${patient.getFamily()} + ${patient.getId()}"
+                        title="Modify"
+                ><i class="material-icons"></i></a>
+                <div
+                        aria-hidden="true" class="modal"
+                        tabindex="-1" th:aria-labelledby="${patient.getFamily()} + ${patient.getId()}"
+                        th:id="${patient.getFamily()} + ${patient.getId()}"
+                >
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Update patient</h5>
+                                <button
+                                        aria-label="Close"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        type="button"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <form
+                                        th:action="'/app/patients/' + ${patient.getId()}"
+                                        th:method="PUT"
+                                        th:object="${patient}"
+                                >
+                                    <input name="id" th:value="${patient.getId()}" type="hidden">
+
+                                    <div class="form-group">
+                                        <label>Lastname</label>
+                                        <input
+                                                class="form-control"
+                                                max="30"
+                                                min="3"
+                                                name="family"
+                                                placeholder="Enter patient's last name"
+                                                required
+                                                th:value="${patient.getFamily()}"
+                                                type="text"
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Firstname</label>
+                                        <input
+                                                class="form-control"
+                                                max="30"
+                                                min="3"
+                                                name="given"
+                                                placeholder="Enter patient's first name"
+                                                required
+                                                th:value="${patient.getGiven()}"
+                                                type="text"
+                                        >
+                                    </div>
+                                    <div
+                                            class="form-group form-check form-control d-flex justify-content-around mt-4"
+                                            th:if="${patient.getSex()} == 'M'"
+                                    >
+
+                                        <label class="form-check-label">Select gender:</label>
+
+                                        <label class="form-check-label">Man</label>
+                                        <input checked class="form-check-input" name="sex" type="radio" value="M">
+
+                                        <label class="form-check-label">Woman</label>
+                                        <input class="form-check-input" name="sex" type="radio" value="F">
+                                    </div>
+
+                                    <div
+                                            class="form-group form-check form-control d-flex justify-content-around mt-4"
+                                            th:if="${patient.getSex()} == 'F'"
+                                    >
+
+                                        <label class="form-check-label">Select gender:</label>
+
+                                        <label class="form-check-label">Man</label>
+                                        <input class="form-check-input" name="sex" type="radio" value="M">
+
+                                        <label class="form-check-label">Woman</label>
+                                        <input checked class="form-check-input" name="sex" type="radio" value="F">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Birthdate</label>
+                                        <input
+                                                class="form-control"
+                                                data-date-format="yyyy-mm-dd"
+                                                name="dob"
+                                                th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                                th:value="${patient.getDob()}"
+                                                type="date"
+                                        >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <input
+                                                class="form-control"
+                                                name="address"
+                                                th:value="${patient.getAddress()}"
+                                                type="text"
+                                        >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <input
+                                                class="form-control" name="phone" th:value="${patient.getPhone()}"
+                                                type="tel"
+                                        >
+                                    </div>
+
+                                    <div class="mt-3 modal-footer">
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-success" type="submit">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-dialog d-flex justify-content-around">
+            <input name="id" th:value="${patient.getId()}" type="hidden">
+            <div class="col-5">
+                <div class="form-group">
+                    <label>Lastname</label>
+                    <input
+                            class="form-control text-center"
+                            disabled
+                            th:value="${patient.getFamily()}"
+                            type="text"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>Firstname</label>
+                    <input
+                            class="form-control text-center"
+                            disabled
+                            th:value="${patient.getGiven()}"
+                            type="text"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <input
+                            class="form-control text-center"
+                            disabled
+                            th:if="${patient.getSex()} == 'M'"
+                            type="text"
+                            value="Men"
+                    >
+                    <input
+                            class="form-control text-center"
+                            disabled
+                            th:if="${patient.getSex()} == 'F'"
+                            type="text"
+                            value="Women"
+                    >
+                </div>
+            </div>
+
+            <div class="col-5">
+                <div>
+                    <label>Birthdate</label>
+                    <input
+                            class="form-control text-center"
+                            data-date-format="yyyy-mm-dd"
+                            disabled
+                            name="dob"
+                            th:value="${patient.getDob() + ' ('+ T(java.time.Period).between(patient.getDob(), #temporals.createToday()).get(T(java.time.temporal.ChronoUnit).YEARS)+' years)'}"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input
+                            class="form-control text-center"
+                            disabled
+                            th:value="${patient.getAddress()}"
+                            type="text"
+                    >
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input
+                            class="form-control text-center"
+                            disabled
+                            th:value="${patient.getPhone()}"
+                            type="tel"
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="d-flex border-bottom border-dark justify-content-end my-3">
+            <div class="col-2"></div>
+            <h2 class="col-8 text-center">Notes</h2>
+            <div class="d-flex justify-content-end align-self-center col-2">
+                <button
+                        aria-controls="newNote"
+                        aria-expanded="false"
+                        class="btn btn-success collapsed d-flex align-item-center content-justify-center"
+                        data-bs-target="#newNote"
+                        data-bs-toggle="collapse"
+                        style="max-height: 40px; max-width: 150px"
+                        type="button"
+                >
+                    New note
+                </button>
+            </div>
+        </div>
+        <div class="collapse px-5" id="newNote">
+            <div class="card border-dark mb-3" style="min-width: 18rem">
+                <form
+                        class="card-body"
+                        method="post"
+                        th:action="@{/app/patients/{id}/notes (id=${patient.getId()})}"
+                >
+                    <div class="modal-body">
+                        <input hidden name="patientId" th:value="${patient.getId()}">
+                        <textarea
+                                cols="33"
+                                name="notes"
+                                required
+                                rows="5"
+                                style="width: 100%; resize: none"
+                        ></textarea>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <button
+                                aria-controls="newNote"
+                                aria-expanded="false"
+                                class="btn btn-secondary collapsed"
+                                data-bs-target="#newNote"
+                                data-bs-toggle="collapse"
+                                type="button"
+                        >Cancel
+                        </button>
+                        <button class="btn btn-success mx-1" type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div th:if="${notes.size() < 1}">
+            <p class="text-center col-12">No data available</p>
+        </div>
+        <div class="d-flex flex-column px-5">
+            <div class="row justify-content-around">
+                <div class="card border-dark mb-3 mx-1 col-5" style="min-width: 18rem" th:each="note:${notes}">
+                    <div
+                            class="card-header text-center"
+                            th:text="${#temporals.format(note.getDate(), 'dd MMMM yyyy HH:mm', #locale.ENGLISH)}"
+                    >
+                        Date
+                    </div>
+                    <div class="card-body text-dark">
+                        <p class="card-text text-center" th:text="${note.getNotes()}">Notes</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <!-- Button trigger modal -->
+                        <button
+                                class="btn btn-primary"
+                                data-bs-toggle="modal"
+                                th:data-bs-target="${'#note' + note.getId()}"
+                                type="button"
+                        >
+                            Update
+                        </button>
+                        <!-- Modal -->
+                        <div
+                                aria-hidden="true"
+                                class="modal fade"
+                                tabindex="-1"
+                                th:aria-labelledby="${note.getId() + 'Label'}"
+                                th:id="${'note'+note.getId()}"
+                        >
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" th:id="${note.getId()+'Label'}">Update note</h5>
+                                        <button
+                                                aria-label="Close"
+                                                class="btn-close"
+                                                data-bs-dismiss="modal"
+                                                type="button"
+                                        ></button>
+                                    </div>
+                                    <form
+                                            th:action="@{/app/patients/{id}/notes/{nId} (id=${patient.getId()}, nId=${note.getId()})}"
+                                            th:method="PUT"
+                                    >
+                                        <div class="modal-body">
+                                            <input hidden name="id" th:value="${note.getId()}">
+                                            <input hidden name="patientId" th:value="${note.getPatientId()}">
+                                            <input hidden name="date" th:value="${note.getDate()}">
+                                            <textarea
+                                                    cols="33"
+                                                    name="notes"
+                                                    required
+                                                    rows="5" style="width: 100%; resize: none"
+                                                    th:text="${note.getNotes()}"
+                                            ></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
+                                                Cancel
+                                            </button>
+                                            <button class="btn btn-primary" type="submit">Save changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+<div th:replace="fragments/script.html :: script"></div>
+<div th:replace="fragments/footer.html :: footer"></div>
+
+</html>
