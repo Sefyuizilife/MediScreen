@@ -8,15 +8,13 @@ import com.mediscreen.report.proxies.PatientProxy;
 import com.mediscreen.report.services.DiabetesRiskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("reports")
+@RequestMapping("reports/assess/")
 public class ReportController {
 
     private final PatientProxy patientProxy;
@@ -31,7 +29,7 @@ public class ReportController {
         this.diabetesRiskService = diabetesRiskService;
     }
 
-    @GetMapping(value = "/{patientId}")
+    @GetMapping("id/{patientId}")
     public ResponseEntity<String> getDiabetesReportByPatientId(@PathVariable Long patientId) {
 
         Patient    patient = this.patientProxy.read(patientId);
@@ -49,13 +47,28 @@ public class ReportController {
                         report.getDiabeticRisk()
                 ), HttpStatus.OK);
     }
-    //
-    //    @GetMapping("familyName/{familyName}")
-    //    public ResponseEntity<String> getDiabeticReportByPatientName(@PathVariable String familyName) {
-    //
-    //        List<String> reports = new ArrayList<>();
 
-    //        List<Patient> patiens = this.patientProxy.search()
-    //    }
+    @PostMapping("familyName/{familyName}")
+    public ResponseEntity<List<String>> getDiabeticReportByPatientName(@PathVariable String familyName) {
 
+        List<Report> reports = new ArrayList<>();
+
+        List<Patient> patients = this.patientProxy.search(familyName, null);
+
+        patients.forEach(patient -> reports.add(
+                new Report(patient, this.noteProxy.browseByPatientId(patient.getId()).getBody())));
+
+        reports.forEach(this.diabetesRiskService::calculate);
+
+        List<String> results = new ArrayList<>();
+
+        reports.forEach(report -> results.add(String.format(
+                "Patient: %s (age %s) diabetes assessment is: %s",
+                report.getFullName(),
+                report.getAge(),
+                report.getDiabeticRisk()
+        )));
+
+        return ResponseEntity.ok(results);
+    }
 }
