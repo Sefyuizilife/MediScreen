@@ -91,7 +91,7 @@ public class PatientController {
 
         } catch (NoSuchElementException e) {
 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -115,9 +115,8 @@ public class PatientController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            return ResponseEntity.ok(
-                    new PatientDto(this.patientService.create(patientDTO.toPatient()))
-            );
+            return new ResponseEntity<>(
+                    new PatientDto(this.patientService.create(patientDTO.toPatient())), HttpStatus.CREATED);
 
         } catch (EntityExistsException e) {
 
