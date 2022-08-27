@@ -65,7 +65,7 @@ public class PatientController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<PatientDto>> search(@RequestParam String lastname, @RequestParam String firstname) {
+    public ResponseEntity<List<PatientDto>> search(@RequestParam String lastname, @RequestParam(required = false) String firstname) {
 
         LOGGER.info("GET: /patients?lastname={}&firstname={}", lastname, firstname);
 
