@@ -9,12 +9,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class PatientConfiguration {
 
-        @Bean
-        public Docket patientApi() {
+    @Bean
+    public Docket patientApi() {
 
-            return new Docket(DocumentationType.SWAGGER_2).select()
-                                                          .apis(RequestHandlerSelectors.basePackage(
-                                                                  "com.mediscreen.patient.controllers"))
-                                                          .build();
-        }
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                                                      .apis(RequestHandlerSelectors.basePackage(
+                                                              "com.mediscreen.patient.controllers"))
+                                                      .build();
+    }
 }
