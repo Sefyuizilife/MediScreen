@@ -1,5 +1,9 @@
 FROM openjdk:11
-RUN mkdir "app"
+
 WORKDIR /app
-COPY target/client-0.0.1-SNAPSHOT.jar client-0.0.1.jar
-ENTRYPOINT ["java", "-jar", "client-0.0.1.jar"]
+
+COPY . /app/client/
+
+RUN cd client && sed -i 's/\r$//' mvnw && ./mvnw clean package && mv target/client-*-SNAPSHOT.jar ../client.jar && rm -rf /app/client
+
+ENTRYPOINT ["java", "-jar", "client.jar"]

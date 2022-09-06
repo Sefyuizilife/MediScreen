@@ -1,5 +1,9 @@
 FROM openjdk:11
-RUN mkdir "app"
+
 WORKDIR /app
-COPY target/note-0.0.1-SNAPSHOT.jar note-0.0.1.jar
-ENTRYPOINT ["java", "-jar", "note-0.0.1.jar"]
+
+COPY . /app/note/
+
+RUN cd note && sed -i 's/\r$//' mvnw && ./mvnw clean package && mv target/note-*-SNAPSHOT.jar ../note.jar && rm -rf /app/note
+
+ENTRYPOINT ["java", "-jar", "note.jar"]

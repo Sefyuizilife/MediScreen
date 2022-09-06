@@ -1,5 +1,9 @@
 FROM openjdk:11
-RUN mkdir "app"
+
 WORKDIR /app
-COPY target/report-0.0.1-SNAPSHOT.jar report-0.0.1.jar
-ENTRYPOINT ["java", "-jar", "report-0.0.1.jar"]
+
+COPY . /app/report/
+
+RUN cd report && sed -i 's/\r$//' mvnw && ./mvnw clean package && mv target/report-*-SNAPSHOT.jar ../report.jar && rm -rf /app/report
+
+ENTRYPOINT ["java", "-jar", "report.jar"]
