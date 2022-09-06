@@ -11,10 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "report", url = "localhost:8083/reports")
+@FeignClient(name = "report", url = "${report.host}", path = "/assess")
 public interface ReportProxy {
 
-    @GetMapping(value = "/{patId}")
+    @GetMapping(value = "/id/{patId}")
     ResponseEntity<String> getDiabetesReport(@PathVariable Long patId);
 
     class Configuration {

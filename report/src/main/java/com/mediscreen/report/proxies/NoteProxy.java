@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.List;
 
-@FeignClient(name = "note", url = "localhost:8082/notes")
+@FeignClient(name = "note", url = "${note.host}", path = "notes")
 public interface NoteProxy {
 
     @GetMapping("/all/patients/{patientId}")
