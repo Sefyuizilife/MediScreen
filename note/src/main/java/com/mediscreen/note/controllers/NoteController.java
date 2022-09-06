@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
@@ -44,7 +43,7 @@ public class NoteController {
 
         try {
 
-            return ResponseEntity.ok(this.noteService.create(note));
+            return new ResponseEntity<>(this.noteService.create(note), HttpStatus.CREATED);
 
         } catch (EntityExistsException e) {
 
