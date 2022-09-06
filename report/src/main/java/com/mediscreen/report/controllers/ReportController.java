@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("reports/assess/")
+@RequestMapping("assess/")
 public class ReportController {
 
     private final PatientProxy patientProxy;
