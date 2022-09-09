@@ -6,11 +6,11 @@ services:
         container_name: mysql
         environment:
             MYSQL_DATABASE: ${MYSQL_DATABASE_NAME}
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
             - sql-data:/var/lib/mysql
         healthcheck:
-            start_period: 10s #(default value 0sec)
+            start_period: 10s # (default value 0sec)
             test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
             timeout: 20s
             retries: 10
@@ -21,9 +21,9 @@ services:
         #image: patient_app
         container_name: patient-app
         environment:
-            MYSQL_URL: mysql #:3306 (Not required when there is only one port in the container)
+            MYSQL_URL: ${MYSQL_URL} #:3306 (Not required when there is only one port in the container)
             MYSQL_DATABASE: ${MYSQL_DATABASE_NAME}
-            MYSQL_USER: root
+            MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
         ports:
@@ -31,14 +31,17 @@ services:
         depends_on:
             mysql:
                 condition: service_healthy
-    #        healthcheck:
-    #            test: ["CMD", "curl --fail http://localhost:8081/actuator/health || exit 1"]
-    #            timeout: 20s
-    #            retries: 3
+                #healthcheck:
+                #test: [ "CMD", "curl --fail http://localhost:8081/actuator/health || exit 1" ]
+                #timeout: 20s
+                #retries: 3
 
     mongodb:
         image: mongo:latest
         container_name: mongodb
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
         volumes:
             - nosql-data:/data/db
 
@@ -47,8 +50,8 @@ services:
         #image: note_app
         container_name: note-app
         environment:
-            MONGODB_URL: mongodb
-            MONGODB_DATABASE: note
+            MONGODB_URL: ${MONGODB_URL}
+            MONGODB_DATABASE: ${MONGODB_DATABASE}
         ports:
             - '8082:8082'
         depends_on:
@@ -59,8 +62,8 @@ services:
         #image: report_app
         container_name: report-app
         environment:
-            PATIENT_HOST: patient-app:8081
-            NOTE_HOST: note-app:8082
+            PATIENT_HOST: ${PATIENT_HOST}
+            NOTE_HOST: ${NOTE_HOST}
         ports:
             - '8083:8083'
         depends_on:
@@ -72,9 +75,9 @@ services:
         #image: client-app
         container_name: client-app
         environment:
-            PATIENT_HOST: patient-app:8081
-            NOTE_HOST: note-app:8082
-            REPORT_HOST: report-app:8083
+            PATIENT_HOST: ${PATIENT_HOST}
+            NOTE_HOST: ${NOTE_HOST}
+            REPORT_HOST: ${REPORT_HOST}
         ports:
             - '80:8080'
         depends_on:
