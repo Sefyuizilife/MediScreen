@@ -24,7 +24,7 @@ services:
             MYSQL_URL: ${MYSQL_URL} #:3306 (Not required when there is only one port in the container)
             MYSQL_DATABASE: ${MYSQL_DATABASE_NAME}
             MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
         ports:
             - '8081:8081'
@@ -39,9 +39,6 @@ services:
     mongodb:
         image: mongo:latest
         container_name: mongodb
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
         volumes:
             - nosql-data:/data/db
 
@@ -51,7 +48,7 @@ services:
         container_name: note-app
         environment:
             MONGODB_URL: ${MONGODB_URL}
-            MONGODB_DATABASE: ${MONGODB_DATABASE}
+            MONGODB_DATABASE: ${MONGODB_DATABASE_NAME}
         ports:
             - '8082:8082'
         depends_on:
