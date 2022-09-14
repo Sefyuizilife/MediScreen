@@ -27,8 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(NoteController.class)
 @ExtendWith(MockitoExtension.class)
+@WebMvcTest(NoteController.class)
 public class NoteControllerTest {
 
     private final MockMvc    mockMvc;
@@ -79,7 +79,8 @@ public class NoteControllerTest {
 
         this.mockMvc.perform(get("/notes/all/patients/{patientId}", 99l))
                     .andDo(print())
-                    .andExpect(status().isOk()).andExpect(content().json(this.notesToJson(new ArrayList<>())));
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(this.notesToJson(new ArrayList<>())));
     }
 
     @Test
@@ -90,11 +91,10 @@ public class NoteControllerTest {
         when(this.noteService.create(any(Note.class))).thenThrow(
                 new EntityExistsException("Patient already exist or id isn't null"));
 
-        this.mockMvc.perform(post("/notes/add")
-                                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                     .param("patientId", note.getPatientId().toString())
-                                     .param("date", note.getDate().plusDays(1).format(Note.DATE_TIME_FORMATTER))
-                                     .param("notes", note.getNotes()))
+        this.mockMvc.perform(post("/notes").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                           .param("patientId", note.getPatientId().toString())
+                                           .param("date", note.getDate().plusDays(1).format(Note.DATE_TIME_FORMATTER))
+                                           .param("notes", note.getNotes()))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
     }
@@ -106,11 +106,10 @@ public class NoteControllerTest {
 
         when(this.noteService.update(any())).thenThrow(new NoSuchElementException("Patient not found"));
 
-        this.mockMvc.perform(put("/notes/{id}", note.getId())
-                                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                     .param("patientId", note.getPatientId().toString())
-                                     .param("notes", note.getNotes())
-                                     .param("date", note.getDate().toString()))
+        this.mockMvc.perform(put("/notes/{id}", note.getId()).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                                             .param("patientId", note.getPatientId().toString())
+                                                             .param("notes", note.getNotes())
+                                                             .param("date", note.getDate().toString()))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
     }
@@ -122,11 +121,10 @@ public class NoteControllerTest {
 
         when(this.noteService.update(any())).thenThrow(new IllegalArgumentException("Patient not found"));
 
-        this.mockMvc.perform(put("/notes/{id}", note.getId())
-                                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                     .param("patientId", note.getPatientId().toString())
-                                     .param("notes", note.getNotes())
-                                     .param("date", note.getDate().toString()))
+        this.mockMvc.perform(put("/notes/{id}", note.getId()).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                                             .param("patientId", note.getPatientId().toString())
+                                                             .param("notes", note.getNotes())
+                                                             .param("date", note.getDate().toString()))
                     .andDo(print())
                     .andExpect(status().isNotFound());
     }
@@ -138,11 +136,10 @@ public class NoteControllerTest {
 
         when(this.noteService.create(any(Note.class))).thenReturn(note);
 
-        this.mockMvc.perform(post("/notes/add")
-                                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                     .param("patientId", note.getPatientId().toString())
-                                     .param("notes", note.getNotes())
-                                     .param("date", note.getDate().toString()))
+        this.mockMvc.perform(post("/notes/").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                            .param("patientId", note.getPatientId().toString())
+                                            .param("notes", note.getNotes())
+                                            .param("date", note.getDate().toString()))
                     .andDo(print())
                     .andExpect(status().isCreated())
                     .andExpect(content().json(this.noteToJson(note)));
@@ -155,11 +152,10 @@ public class NoteControllerTest {
 
         when(this.noteService.update(any(Note.class))).thenReturn(note);
 
-        this.mockMvc.perform(
-                    put("/notes/{id}", note.getId()).contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                                                    .param("patientId", note.getPatientId().toString())
-                                                    .param("notes", note.getNotes())
-                                                    .param("date", note.getDate().toString()))
+        this.mockMvc.perform(put("/notes/{id}", note.getId()).contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                                                             .param("patientId", note.getPatientId().toString())
+                                                             .param("notes", note.getNotes())
+                                                             .param("date", note.getDate().toString()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().json(this.noteToJson(note)));
