@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/notes")
 public class NoteController {
 
     private static final Logger      LOGGER = LoggerFactory.getLogger(NoteController.class);
@@ -27,7 +27,7 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @GetMapping("/all/patients/{patientId}")
+    @GetMapping("notes/all/patients/{patientId}")
     public ResponseEntity<List<Note>> browseByPatientId(@PathVariable Long patientId) {
 
         LOGGER.info("GET: /notes/patients/{}", patientId);
@@ -36,7 +36,7 @@ public class NoteController {
     }
 
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "notes", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<Note> create(@Valid Note note) {
 
         LOGGER.info("GET: /notes/add");
@@ -51,7 +51,7 @@ public class NoteController {
         }
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PutMapping(value = "notes/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<Note> update(@PathVariable BigInteger id, @Valid Note note) {
 
         LOGGER.info("GET: /notes/{}", id);
@@ -68,5 +68,20 @@ public class NoteController {
 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping(value = "patHistory/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> createWithCurl(Long patId, String notes) {
+
+        if (patId == null || notes == null) {
+            return new ResponseEntity<>("patId and notes is required", HttpStatus.BAD_REQUEST);
+        }
+
+        Note note = new Note();
+        note.setPatientId(patId);
+        note.setDate(LocalDateTime.now().withNano(0).toString());
+        note.setNotes(notes);
+
+        return this.create(note);
     }
 }
