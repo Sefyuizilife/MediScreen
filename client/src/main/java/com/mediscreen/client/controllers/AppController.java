@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -65,14 +64,14 @@ public class AppController {
         LOGGER.info("GET: /app/patients/{}", id);
 
         model.addAttribute("patient", this.patientProxy.read(id));
-        model.addAttribute("notes", Objects.requireNonNull(this.noteProxy.browseByPatientId(id).getBody())
-                                           .stream()
-                                           .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
-                                           .collect(Collectors.toList()));
+        model.addAttribute("notes", this.noteProxy.browseByPatientId(id)
+                                                  .stream()
+                                                  .sorted((o1, o2) -> o2.getDate().compareTo(o1.getDate()))
+                                                  .collect(Collectors.toList()));
 
         if (withReport) {
 
-            String body = this.reportProxy.getDiabetesReport(id).getBody();
+            String body = this.reportProxy.getDiabetesReport(id);
 
             if (body != null) {
                 this.passingOnTheAssessment(model, body);

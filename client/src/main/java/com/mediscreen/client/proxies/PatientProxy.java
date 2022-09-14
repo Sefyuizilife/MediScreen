@@ -16,7 +16,7 @@ public interface PatientProxy {
     @GetMapping("/search")
     List<Patient> search(@RequestParam String lastname, @RequestParam String firstname);
 
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     Patient create(Patient patient);
 
     @GetMapping("/{id}")
