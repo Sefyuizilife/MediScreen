@@ -39,6 +39,8 @@ services:
     mongodb:
         image: mongo:latest
         container_name: mongodb
+        environment:
+            MONGODB_DATABASE_NAME: ${MONGODB_DATABASE}
         volumes:
             - nosql-data:/data/db
 
@@ -48,7 +50,7 @@ services:
         container_name: note-app
         environment:
             MONGODB_URL: ${MONGODB_URL}
-            MONGODB_DATABASE: ${MONGODB_DATABASE_NAME}
+            MONGODB_DATABASE: ${MONGODB_DATABASE}
         ports:
             - '8082:8082'
         depends_on:
