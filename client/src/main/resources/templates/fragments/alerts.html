@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="FR">
+<body>
+<div th:fragment="alert" th:id="message" th:switch="${message}">
+    <div class="alert alert-dismissible fade show alert-success" role="alert" th:case="'create'">
+        The patient has been successfully registered.
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <div class="alert alert-dismissible fade show alert-primary" role="alert" th:case="'delete'">
+        The patient has been successfully removed
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <div class="alert alert-dismissible fade show alert-warning" role="alert" th:case="'update'">
+        The patient has been successfully modified
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+    <div class="alert alert-dismissible fade show alert-danger" role="alert" th:case="'error'">
+        An error has occurred.
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    </div>
+</div>
+</body>
+</html>
