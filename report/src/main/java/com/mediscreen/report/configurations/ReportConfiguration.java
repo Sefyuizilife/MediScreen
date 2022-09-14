@@ -14,7 +14,7 @@ public class ReportConfiguration {
 
         return new Docket(DocumentationType.SWAGGER_2).select()
                                                       .apis(RequestHandlerSelectors.basePackage(
-                                                              "com.mediscreen.note.controllers"))
+                                                              "com.mediscreen.report.controllers"))
                                                       .build();
     }
 }

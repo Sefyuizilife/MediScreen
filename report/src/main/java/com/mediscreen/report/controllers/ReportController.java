@@ -57,7 +57,7 @@ public class ReportController {
         return this.getDiabetesReportByPatientId(patId);
     }
 
-    @PostMapping("assess/familyName")
+    @PostMapping(value = "assess/familyName", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<List<String>> getDiabeticReportByPatientName(String familyName) {
 
         List<Report> reports = new ArrayList<>();

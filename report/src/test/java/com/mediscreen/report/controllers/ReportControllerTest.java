@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigInteger;
@@ -88,7 +89,8 @@ public class ReportControllerTest {
         when(PATIENT_PROXY.search(any(), any())).thenReturn(patients);
         when(NOTE_PROXY.browseByPatientId(any())).thenReturn(NOTES);
 
-        this.mockMvc.perform(post("/assess/familyName").param("familyName", "test"))
+        this.mockMvc.perform(post("/assess/familyName").param("familyName", "test")
+                                                       .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$").isArray())
                     .andExpect(jsonPath("$", hasSize(3)));
