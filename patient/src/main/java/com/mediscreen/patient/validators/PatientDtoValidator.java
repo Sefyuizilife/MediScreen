@@ -24,29 +24,29 @@ public class PatientDtoValidator implements Validator {
 
         PatientDto patientDTO = (PatientDto) target;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "family", "family.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "given", "given.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dob", "dob.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "sex", "sex.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "family", "family.empty", "Family is required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "given", "given.empty", "Given is required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dob", "dob.empty", "Dob is required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "sex", "sex.empty", "Sex is required");
 
-        if (!PATTERN.matcher(patientDTO.getFamily()).matches()) {
+        if (patientDTO.getFamily() == null || !PATTERN.matcher(patientDTO.getFamily()).matches()) {
 
-            errors.rejectValue("family", "family.size", "Lastname must be between 3 and 30 alphanumeric characters.");
+            errors.rejectValue("family", "family.size", "Family must be between 3 and 30 alphanumeric characters.");
         }
 
-        if (!PATTERN.matcher(patientDTO.getGiven()).matches()) {
+        if (patientDTO.getFamily() == null || !PATTERN.matcher(patientDTO.getGiven()).matches()) {
 
-            errors.rejectValue("given", "given.size", "Firstname must be between 3 and 30 alphanumeric characters.");
+            errors.rejectValue("given", "given.size", "Given must be between 3 and 30 alphanumeric characters.");
         }
 
         if (!Arrays.asList('M', 'F').contains(patientDTO.getSex())) {
 
-            errors.rejectValue("sex", "sex.error", "The sex value must be \"F\" or \"M\".");
+            errors.rejectValue("sex", "sex.error", "Sex value must be \"F\" or \"M\".");
         }
 
         if (LocalDate.parse(patientDTO.getDob()).isAfter(LocalDate.now())) {
 
-            errors.rejectValue("dob","dob.after", "The date of birth cannot be after the current date.");
+            errors.rejectValue("dob", "dob.format", "Date of birth (dob) isn't valid format");
         }
     }
 }

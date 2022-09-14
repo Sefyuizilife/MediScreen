@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
  * Controller specifically for managing the {@link Patient}.
  */
 @RestController
-@RequestMapping("/patients")
 public class PatientController {
 
     private static final Logger         LOGGER              = LoggerFactory.getLogger(PatientController.class);
@@ -55,7 +54,7 @@ public class PatientController {
      *
      * @return a {@link List} of {@link Patient}.
      */
-    @GetMapping()
+    @GetMapping("patients")
     public ResponseEntity<List<PatientDto>> browse() {
 
         LOGGER.info("GET: /patients");
@@ -64,8 +63,8 @@ public class PatientController {
                 this.patientService.getAll().stream().map(PatientDto::new).collect(Collectors.toList()));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<PatientDto>> search(@RequestParam String lastname, @RequestParam String firstname) {
+    @GetMapping("patients/search")
+    public ResponseEntity<List<PatientDto>> search(@RequestParam String lastname, @RequestParam(required = false) String firstname) {
 
         LOGGER.info("GET: /patients?lastname={}&firstname={}", lastname, firstname);
 
@@ -80,7 +79,7 @@ public class PatientController {
      *
      * @return a {@link Patient}.
      */
-    @GetMapping("/{id}")
+    @GetMapping("patients/{id}")
     public ResponseEntity<PatientDto> read(@PathVariable Long id) {
 
         LOGGER.info("GET: /patients/{}", id);
@@ -91,7 +90,7 @@ public class PatientController {
 
         } catch (NoSuchElementException e) {
 
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -103,21 +102,20 @@ public class PatientController {
      *
      * @return a {@link Patient}
      */
-    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<PatientDto> create(@Valid PatientDto patientDTO, Errors errors) {
+    @PostMapping(value = {"patient/add", "patients"}, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<?> create(@Valid PatientDto patientDTO, Errors errors) {
 
-        LOGGER.info("POST: /patients");
+        LOGGER.info("POST: /patients/add");
 
         try {
 
             if (errors.hasErrors()) {
 
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
 
-            return ResponseEntity.ok(
-                    new PatientDto(this.patientService.create(patientDTO.toPatient()))
-            );
+            return new ResponseEntity<>(
+                    new PatientDto(this.patientService.create(patientDTO.toPatient())), HttpStatus.CREATED);
 
         } catch (EntityExistsException e) {
 
@@ -133,7 +131,7 @@ public class PatientController {
      *
      * @return a {@link Patient}.
      */
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PutMapping(value = "patients/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> update(@Valid PatientDto patientDTO, Errors errors) {
 
         LOGGER.info("PUT: /patients");
