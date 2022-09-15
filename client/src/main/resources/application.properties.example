@@ -1,0 +1,7 @@
+spring.application.name                = MediScreen
+
+spring.data.mongodb.uri                = ${PATIENT_HOST:localhost:8081}
+spring.data.mongodb.u                  = ${NOTE_HOST:localhost:8082}
+spring.data.mongodb.uri                = ${REPORT_HOST:localhost:8083}
+
+spring.mvc.hiddenmethod.filter.enabled = true

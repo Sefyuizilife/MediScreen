@@ -32,7 +32,9 @@ public class PatientService {
 
     public List<Patient> getAll(String lastname, String firstname) {
 
-        return this.patientRepository.findAllByLastnameAndFirstname(lastname, firstname);
+        return firstname == null ?
+                this.patientRepository.findAllByLastname(lastname) :
+                this.patientRepository.findAllByLastnameAndFirstname(lastname, firstname);
     }
 
     public Patient create(Patient patient) {

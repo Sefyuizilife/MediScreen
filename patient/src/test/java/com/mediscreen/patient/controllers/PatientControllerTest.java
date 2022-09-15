@@ -131,7 +131,7 @@ public class PatientControllerTest {
 
         PatientDto patientDTO = new PatientDto(patient);
 
-        this.mockMvc.perform(post("/patients/add")
+        this.mockMvc.perform(post("/patients")
                                      .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                                      .param("family", patientDTO.getFamily())
                                      .param("given", patientDTO.getGiven())
@@ -179,7 +179,7 @@ public class PatientControllerTest {
 
         when(this.patientService.create(any(Patient.class))).thenReturn(patient);
 
-        this.mockMvc.perform(post("/patients/add")
+        this.mockMvc.perform(post("/patients")
                                      .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                                      .param("family", patientDTO.getFamily())
                                      .param("given", patientDTO.getGiven())
@@ -201,7 +201,7 @@ public class PatientControllerTest {
 
         when(this.patientService.create(any(Patient.class))).thenThrow(EntityExistsException.class);
 
-        this.mockMvc.perform(post("/patients/add")
+        this.mockMvc.perform(post("/patients")
                                      .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                                      .param("id", patientDTO.getId().toString())
                                      .param("family", patientDTO.getFamily())
