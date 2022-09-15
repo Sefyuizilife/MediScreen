@@ -45,13 +45,13 @@ public class DiabetesRiskServiceTest {
                                  .map(Report::getDiabeticRisk)
                                  .filter(result -> result.equals(DiabetesAssessmentResult.NONE.getResult()))
                                  .count())
-                  .isEqualTo(4);
+                  .isEqualTo(2);
         Assertions.assertThat(
                           reports.stream()
                                  .map(Report::getDiabeticRisk)
                                  .filter(result -> result.equals(DiabetesAssessmentResult.BORDERLINE.getResult()))
                                  .count())
-                  .isEqualTo(4);
+                  .isEqualTo(6);
         Assertions.assertThat(
                           reports.stream()
                                  .map(Report::getDiabeticRisk)
@@ -71,7 +71,7 @@ public class DiabetesRiskServiceTest {
 
         Patient patient = new Patient();
         patient.setSex('A');
-        patient.setDob(LocalDate.now().minusYears(31L).toString());
+        patient.setDob(LocalDate.now().minusYears(30L).toString());
 
         Report report = new Report(patient, new ArrayList<>());
 

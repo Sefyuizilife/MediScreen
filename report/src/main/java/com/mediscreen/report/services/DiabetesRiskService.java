@@ -20,15 +20,15 @@ public class DiabetesRiskService {
 
         if (report.getAge() > DiabetesRules.AGE_LIMIT) {
 
-            report.setDiabeticRisk(this.assessmentMoreThanThirtyYears(report.getSex(), occurrenceNumber));
+            report.setDiabeticRisk(this.assessmentMoreThanThirtyYears(occurrenceNumber));
 
         } else {
 
-            report.setDiabeticRisk(this.assessmentThirtyYearsOrLess(occurrenceNumber));
+            report.setDiabeticRisk(this.assessmentThirtyYearsOrLess(report.getSex(), occurrenceNumber));
         }
     }
 
-    private String assessmentThirtyYearsOrLess(int occurrenceNumber) {
+    private String assessmentMoreThanThirtyYears(int occurrenceNumber) {
 
         if (occurrenceNumber >= 8) {
 
@@ -46,7 +46,7 @@ public class DiabetesRiskService {
         return DiabetesAssessmentResult.NONE.getResult();
     }
 
-    private String assessmentMoreThanThirtyYears(Character sex, int occurrenceNumber) {
+    private String assessmentThirtyYearsOrLess(Character sex, int occurrenceNumber) {
 
         switch (sex) {
 
@@ -58,7 +58,11 @@ public class DiabetesRiskService {
                 } else if (occurrenceNumber >= 3) {
 
                     return DiabetesAssessmentResult.IN_DANGER.getResult();
+                } else if (occurrenceNumber >= 2) {
+
+                    return DiabetesAssessmentResult.BORDERLINE.getResult();
                 }
+
                 break;
 
             case 'F':
@@ -69,7 +73,11 @@ public class DiabetesRiskService {
                 } else if (occurrenceNumber >= 4) {
 
                     return DiabetesAssessmentResult.IN_DANGER.getResult();
+                } else if (occurrenceNumber >= 2) {
+
+                    return DiabetesAssessmentResult.BORDERLINE.getResult();
                 }
+
                 break;
 
             default:
@@ -86,7 +94,7 @@ public class DiabetesRiskService {
 
         notes.stream().map(Note::getNotes).forEach(note -> {
             DiabetesRules.TRIGGERS.forEach(trigger -> {
-                if (note.contains(trigger)) {
+                if (note.toLowerCase().contains(trigger.toLowerCase())) {
 
                     temporaryTriggers.remove(trigger);
                 }
