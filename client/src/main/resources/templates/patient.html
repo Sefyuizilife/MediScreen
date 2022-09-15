@@ -141,51 +141,6 @@
                 </div>
             </div>
         </div>
-        <div>
-            <h2 class="text-center pb-2 my-3 border-bottom border-dark">Diabetes risk assessment</h2>
-        </div>
-        <div class="text-center form-group mt-2 mx-5">
-            <label class="col-9 mx-auto" th:switch="${report}">
-                <a
-                        class="btn btn-light form-control text-center border-dark"
-                        th:case="'ToBeCalculated'"
-                        th:href="@{'/app/patients/{id}?withReport=true' (id=${patient.getId()})}"
-                        type="text"
-                >Initiate Diabetes Risk Assessment</a>
-                <input
-                        class="form-control text-center"
-                        disabled
-                        style="background-color: darkgreen; color: white"
-                        th:case="'None'"
-                        th:value="${reportValue}"
-                        type="text"
-                >
-                <input
-                        class="form-control text-center"
-                        disabled
-                        style="background-color: yellow; color: white"
-                        th:case="'Borderline'"
-                        th:value="${reportValue}"
-                        type="text"
-                >
-                <input
-                        class="form-control text-center"
-                        disabled
-                        style="background-color: darkgoldenrod; color: white"
-                        th:case="'Danger'"
-                        th:value="${reportValue}"
-                        type="text"
-                >
-                <input
-                        class="form-control text-center"
-                        disabled
-                        style="background-color: crimson; color: white"
-                        th:case="'Early'"
-                        th:value="${reportValue}"
-                        type="text"
-                >
-            </label>
-        </div>
         <div class="modal-dialog d-flex justify-content-around">
             <input name="id" th:value="${patient.getId()}" type="hidden">
             <div class="col-5">
